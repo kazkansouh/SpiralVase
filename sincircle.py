@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# nothing in this script is applicable when not __main__
 if __name__ != "__main__" :
     exit
 
@@ -20,7 +21,7 @@ import bpy
 import bmesh
 from math import cos, sin, radians
 import sys
-from argparse import ArgumentParser
+from argparse import ArgumentParser, SUPPRESS
 
 argv = sys.argv
 while len(argv) > 0 :
@@ -38,6 +39,27 @@ args = ArgumentParser(prog='blender --python ' + __file__ + ' --',
                           + " printed. To avoid clash with Blender, the "
                           + "argument prefix char is changed from '-' to '+'.",
                       prefix_chars='+')
+
+args.add_argument('++outputstl',
+                  type=str,
+                  default=SUPPRESS,
+                  dest='file',
+                  metavar='S',
+                  help='Output stl file name.'
+                    + ' [type: %(type)s, default: none]')
+
+args.add_argument('++outputpng',
+                  type=str,
+                  default=SUPPRESS,
+                  dest='png',
+                  metavar='S',
+                  help='Output png file name.'
+                    + ' [type: %(type)s, default: none]')
+
+args.add_argument('++close',
+                  action='store_true',
+                  dest='close',
+                  help='Close Blender when finished.')
 
 args.add_argument('++slices',
                   type=int,
@@ -147,17 +169,14 @@ args.add_argument('++slice-wave-magnitude-wave',
 
 A = args.parse_args(argv)
 
-print(A)
-
 layers = A.layers
 layer_height = A.layer_height
 
-# start and end angle for control of the scalling, set both to 0 to
+# start and end angle for control of the scaling, set both to 0 to
 # disable
 layer_start_angle = A.slice_scale[0]
 layer_end_angle = A.slice_scale[1]
-# aplitude of sine wave defined by above start
-# and stop
+# amplitude of sine wave defined by above start and stop
 layer_amplitude = A.slice_scale[2]
 
 # start and end angle for control of the rotation, set both to 0 to
@@ -198,19 +217,43 @@ def drange(start, stop, step):
         yield r
         r += step
 
+scene = bpy.context.scene
+
 bpy.ops.object.mode_set(mode='OBJECT')
 
 # delete objects, clean up ....
-print("deleting all objects")
+print("preparing environment")
 for i in bpy.data.objects :
     i.select = True
     bpy.ops.object.delete()
 
-print("building objecct")
-mesh = bpy.data.meshes.new("mesh")  # add a new mesh
-obj = bpy.data.objects.new("SinCircle", mesh)  # add a new object using the mesh
+# add camera
+bpy.ops.object.camera_add()
+scene.camera = bpy.context.active_object
 
-scene = bpy.context.scene
+# setup camera
+scene.render.resolution_x = 1024
+scene.render.resolution_y = 768
+scene.camera.data.lens_unit = 'FOV'
+scene.camera.data.angle = radians(10)
+scene.camera.data.clip_end = 4000
+scene.camera.rotation_euler[0] = radians(80)
+scene.camera.rotation_euler[1] = 0
+scene.camera.rotation_euler[2] = 0
+
+# add lamp
+bpy.ops.object.lamp_add(type='SUN')
+lamp = bpy.context.active_object
+lamp.data.color = (0.228546, 0.271841, 1) # light blue
+lamp.rotation_euler[0] = scene.camera.rotation_euler[0]
+lamp.rotation_euler[1] = scene.camera.rotation_euler[1]
+lamp.rotation_euler[2] = scene.camera.rotation_euler[2]
+
+print("building object")
+mesh = bpy.data.meshes.new("mesh")  # add a new mesh
+# add a new object using the mesh
+obj = bpy.data.objects.new("SpiralVase", mesh)
+
 scene.objects.link(obj)  # put the object into the scene (link)
 scene.objects.active = obj  # set as the active object in the scene
 obj.select = True  # select object
@@ -220,14 +263,14 @@ bm = bmesh.new()
 
 # util function
 def interpolate(start,end,points,point) :
-    "linear interplate to find point of points between start and end"
+    "linear interpolate to find point of points between start and end"
     if point >= points :
         return end
     if point <= 0 :
         return start
     return ((end - start) / points) * point + start
 
-print("calculating verticies")
+print("calculating vertices")
 
 old_layer_vs = None
 for l in range(0,layers) :
@@ -301,3 +344,31 @@ print("finalise")
 # make the bmesh the object's mesh
 bm.to_mesh(mesh)
 bm.free()  # always do this when finished
+
+# adjust view to whole object
+for area in bpy.context.screen.areas :
+    if area.type == 'VIEW_3D' :
+        ctx = bpy.context.copy()
+        ctx['area'] = area
+        ctx['region'] = area.regions[-1]
+        if area.spaces.active.region_3d.is_perspective :
+            bpy.ops.view3d.view_persportho(ctx)
+        bpy.ops.view3d.view_selected(ctx)
+        bpy.ops.view3d.camera_to_view_selected(ctx)
+
+# set lamp position to camera position
+lamp.location[0] = scene.camera.location[0]
+lamp.location[1] = scene.camera.location[1]
+lamp.location[2] = scene.camera.location[2]
+
+if 'png' in A :
+    print("exporting image")
+    bpy.context.scene.render.filepath = A.png
+    bpy.ops.render.render(animation=False,write_still=True)
+
+if 'file' in A :
+    print("exporting to " + A.file)
+    bpy.ops.export_mesh.stl(filepath=A.file)
+
+if A.close :
+    bpy.ops.wm.window_close()
