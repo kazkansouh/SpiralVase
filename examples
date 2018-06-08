@@ -1,0 +1,46 @@
+{
+    "vase": {
+        "slices": "200",
+        "slice-height": "0.2",
+        "slice-samples": "800",
+        "vase-radius": "7",
+        "slice-scale-wave": ["0", "335", "0.6"],
+        "slice-rotate-wave": ["0", "360", "30"],
+        "slice-wave-amplitude": "1",
+        "slice-wave-frequency": "12",
+        "slice-wave-magnitude-wave": ["0", "90", "20"]
+    },
+    "tumbler": {
+        "slices": "100",
+        "slice-height": "0.2",
+        "slice-samples": "800",
+        "vase-radius": "7",
+        "slice-scale-wave": ["30", "60", "0.8"],
+        "slice-rotate-wave": ["0", "360", "15"],
+        "slice-wave-amplitude": "1",
+        "slice-wave-frequency": "6",
+        "slice-wave-magnitude-wave": ["0", "180", "100"]
+    },
+    "melty": {
+        "slices": "50",
+        "slice-height": "0.2",
+        "slice-samples": "800",
+        "vase-radius": "4",
+        "slice-scale-wave": ["90", "180", "1"],
+        "slice-rotate-wave": ["0", "180", "90"],
+        "slice-wave-amplitude": "3",
+        "slice-wave-frequency": "2",
+        "slice-wave-magnitude-wave": ["30", "120", "50"]
+    },
+    "lumpy-bowl": {
+        "slices": "150",
+        "slice-height": "0.2",
+        "slice-samples": "800",
+        "vase-radius": "12",
+        "slice-scale-wave": ["0", "135", "1"],
+        "slice-rotate-wave": ["0", "360", "0"],
+        "slice-wave-amplitude": "2",
+        "slice-wave-frequency": "6",
+        "slice-wave-magnitude-wave": ["90", "750", "150"]
+    }
+}
