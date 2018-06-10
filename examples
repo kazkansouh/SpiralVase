@@ -42,5 +42,60 @@
         "slice-wave-amplitude": "2",
         "slice-wave-frequency": "6",
         "slice-wave-magnitude-wave": ["90", "750", "150"]
+    },
+    "lumpy-bowl": {
+        "slices": "200",
+        "slice-height": "0.2",
+        "slice-samples": "800",
+        "vase-radius": "12",
+        "slice-scale-wave": ["0", "340", "0.4"],
+        "slice-rotate-wave": ["0", "0", "0"],
+        "slice-wave-amplitude": "1.3",
+        "slice-wave-frequency": "10",
+        "slice-wave-magnitude-wave": ["0", "700", "200"]
+    },
+    "linear-vase": {
+        "slices": "200",
+        "slice-height": "0.2",
+        "slice-samples": "800",
+        "vase-radius": "7",
+        "slice-scale-wave": ["0", "335", "0.6"],
+        "slice-rotate-wave": ["0", "360", "0"],
+        "slice-wave-amplitude": "1",
+        "slice-wave-frequency": "32",
+        "slice-wave-magnitude-wave": ["0", "90", "20"]
+    },
+    "hf-vase": {
+        "slices": "200",
+        "slice-height": "0.2",
+        "slice-samples": "800",
+        "vase-radius": "7",
+        "slice-scale-wave": ["0", "335", "0.6"],
+        "slice-rotate-wave": ["0", "360", "30"],
+        "slice-wave-amplitude": "0.5",
+        "slice-wave-frequency": "32",
+        "slice-wave-magnitude-wave": ["0", "90", "20"]
+    },
+    "lumpy-bowl-2": {
+        "slices": "70",
+        "slice-height": "0.2",
+        "slice-samples": "800",
+        "vase-radius": "10",
+        "slice-scale-wave": ["280", "500", "0.3"],
+        "slice-rotate-wave": ["0", "360", "0"],
+        "slice-wave-amplitude": "0.8",
+        "slice-wave-frequency": "10",
+        "slice-wave-magnitude-wave": ["0", "360", "70"]
+    },
+    "ripple-column": {
+        "slices": "200",
+        "slice-height": "0.2",
+        "slice-samples": "800",
+        "vase-radius": "10",
+        "slice-scale-wave": ["0", "720", "0"],
+        "slice-rotate-wave": ["0", "360", "0"],
+        "slice-wave-amplitude": "0.8",
+        "slice-wave-frequency": "10",
+        "slice-wave-magnitude-wave": ["180", "900", "200"]
     }
 }
