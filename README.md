@@ -1,7 +1,8 @@
-# SinVase
+# Spiral Vase
 
 Python script for Blender to generate spiral vase models that can be
-exported for use with 3D printers.
+exported for use with 3D printers. All vases are heavily based on
+sinusoidal functions.
 
 ## Examples
 
@@ -10,14 +11,18 @@ A number of example shapes are provided, and are defined in the
 STL files.
 
 The following command will read the `examples` file and put the STL
-files into a directly called STL directory and put the PNGs in to a
-directory called PNG.
+files into a directly called `stl` directory and put the PNG files in
+to a directory called `png`.
 
 ```bash
 
 generate.py --stl-dir stl --png-dir png examples
 
 ```
+
+The examples file contains a JSON representation of command line
+arguments for the sincircle.py script (see below).
+
 ### Spiral Vase
 
 ![Spiral Vase](./img/vase.png)
@@ -25,6 +30,10 @@ generate.py --stl-dir stl --png-dir png examples
 ### Tumbler
 
 ![Tumbler](./img/tumbler.png)
+
+### Ripple Column
+
+![Ripple Column](./img/ripple-column.png)
 
 ## Usage
 
@@ -107,8 +116,4 @@ optional arguments:
                         is sin(0)=0) and over the subsequent 20 layers
                         graduate to the maximum ridges as sin(90)=1. [type:
                         float, default: [0, 90, 20]]
-
 ```
-
-Command line arguments to the script are placed after the `--` and
-instead of starting with `-` they start with `+`.
